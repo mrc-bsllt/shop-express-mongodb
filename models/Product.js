@@ -3,18 +3,17 @@ const { getDb } = require('../utils/database')
 const ObjId = mongodb.ObjectId
 
 class Product {
-  constructor(title, price, image_url, description) {
+  constructor(title, price, image_url, description, user_id) {
     this.title = title
     this.price = typeof price === 'string' ? +price : price
     this.image_url = image_url
     this.description = description
+    this.user_id = user_id
   }
 
   save() {
     const db = getDb()
-    return db.collection('products').insertOne(this).then(result => {
-        console.log(result)
-      }).catch(error => console.log(error))
+    return db.collection('products').insertOne(this)
   }
 
   update(id) {
@@ -24,16 +23,12 @@ class Product {
 
   static fetchAll() {
     const db = getDb()
-    return db.collection('products').find().toArray().then(products => {
-      return products
-    }).catch(error => console.log(error))
+    return db.collection('products').find().toArray()
   }
 
   static getProductById(id) {
     const db = getDb()
-    return db.collection('products').find({ _id: new ObjId(id) }).next().then(product => {
-      return product
-    }).catch(error => console.log(error))
+    return db.collection('products').findOne({ _id: new ObjId(id) })
   }
 
   static deleteById(id) {

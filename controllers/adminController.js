@@ -10,7 +10,8 @@ const productsPage = (req, res, next) => {
 // Add product POST
 const addProduct = (req, res, next) => {
   const { title, price, image_url, description } = req.body
-  const product = new Product(title, price, image_url, description)
+  const user_id = req.user._id
+  const product = new Product(title, price, image_url, description, user_id)
 
   product.save().then(() => {
       res.redirect('/admin/products')
@@ -33,7 +34,8 @@ const editProductPage = (req, res, next) => {
 // POST edit product
 const editProduct = (req, res, next) => { 
   const { id, title, image_url, price, description } = req.body
-  const product = new Product(title, price, image_url, description)
+  const user_id = req.user._id
+  const product = new Product(title, price, image_url, description, user_id)
 
   product.update(id).then(() => {
     res.redirect('/admin/products')

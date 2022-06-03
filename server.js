@@ -1,9 +1,20 @@
 const path = require('path')
 const express = require('express')
 const { mongoConnect } = require('./utils/database')
+
 const bodyParser = require('body-parser')
 
+// MODELS
+const User = require('./models/User')
+
 const app = express()
+
+app.use((req, res, next) => {
+  User.getUserByEmail('mrc@mail.com').then(user => {
+    req.user = user
+    next()
+  }).catch(error => console.log(error))
+})
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.set('view engine', 'ejs')
@@ -19,7 +30,16 @@ app.use('/', (req, res, next) => {
 })
 
 mongoConnect(() => {
-  app.listen(3000)
+  User.fetchUsers().then(users => {
+    if(!users.length) {
+      const user = new User('mrc.bsllt', 'mrc@mail.com')
+      user.save().then(() => {
+        app.listen(3000)
+      }).catch(error => console.log(error))
+    } else {
+      app.listen(3000)
+    }
+  }).catch(error => console.log(error))
 })
 
   
