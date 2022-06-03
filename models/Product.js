@@ -1,29 +1,26 @@
-const Sequelize = require('sequelize')
-const sequelize = require('../utils/database')
+const { getDb } = require('../utils/database')
 
-const Product = sequelize.define('product', {
-  id: { 
-    type: Sequelize.INTEGER,
-    allowNull: false,
-    autoIncrement: true,
-    primaryKey: true
-  },
-  title: {
-    type: Sequelize.STRING(100),
-    allowNull: false
-  },
-  price: {
-    type: Sequelize.DOUBLE,
-    allowNull: false
-  },
-  image_url: {
-    type: Sequelize.STRING,
-    allowNull: false
-  },
-  description: {
-    type: Sequelize.TEXT,
-    allowNull: true
+class Product {
+  constructor(title, price, image_url, description) {
+    this.title = title
+    this.price = typeof price === 'string' ? +price : price
+    this.image_url = image_url
+    this.description = description
   }
-})
+
+  save() {
+    const db = getDb()
+    return db.collection('products').insertOne(this).then(result => {
+        console.log(result)
+      }).catch(error => console.log(error))
+  }
+
+  static fetchAll() {
+    const db = getDb()
+    return db.collection('products').find().toArray().then(products => {
+      return products
+    }).catch(error => console.log(error))
+  }
+}
 
 module.exports = Product

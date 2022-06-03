@@ -7,7 +7,6 @@ const { homePage,
         cartPage, 
         cartPost,
         cartRemove,
-        checkoutPage,
         createOrder, 
         ordersPage } = require('../controllers/userController')
 
@@ -19,8 +18,6 @@ router.get(`/products/:id`, productPage)
 router.get('/cart', cartPage)
 router.post('/cart', cartPost)
 router.post('/cart/remove', cartRemove)
-
-router.get('/checkout', checkoutPage)
 
 router.post('/create-order', createOrder)
 router.get('/orders', ordersPage)
