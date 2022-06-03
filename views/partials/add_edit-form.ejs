@@ -1,0 +1,25 @@
+<form class="product-form" action="/admin/<%= product ? 'edit-product' : 'add-product' %> " method="POST">
+  <div class="form-control">
+      <label for="title">Title</label>
+      <input type="text" name="title" id="title" value="<%= product ? product.title : '' %>" />
+  </div>
+  <div class="form-control">
+    <label for="image_url">Image URL</label>
+    <input type="text" name="image_url" id="image_url" value="<%= product ? product.image_url: '' %>" />
+  </div>
+  <div class="form-control">
+    <label for="description">Description</label>
+    <textarea name="description" id="description" cols="30" rows="10"><%= product ? product.description: '' %></textarea>
+  </div>
+  <div class="form-control">
+    <label for="price">Price</label>
+    <input type="number" name="price" id="price" step="0.01" value="<%= product ? product.price : '' %>" />
+  </div>
+
+  <% if(product) { %>
+    <input type="hidden" name="id" value="<%= product.id %>" />
+    <input type="hidden" name="createdAt" value="<%= product.createdAt %>" />
+  <% } %>
+
+  <button class="btn" type="submit"><%= product ? 'Edit Product' : 'Add product' %> </button>
+</form>

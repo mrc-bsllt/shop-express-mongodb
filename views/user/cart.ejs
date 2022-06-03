@@ -1,0 +1,32 @@
+<%- include('../partials/top-document') %> 
+</head>
+
+<body>
+  <%- include('../partials/header') %>
+  <h1>CART PAGE</h1> 
+
+  <% if(products.length) { %>
+    <ul>
+      <% products.forEach(product => { %>
+       <li>
+         <%= product.title %> - <strong>Quantity: <%= product.cart_product.quantity %></strong>
+         <form action="/cart/remove" method="POST">
+           <input type="hidden" name="id" value="<%= product.id %>">
+           <button type="submit">Remove</button>
+         </form>
+        </li>
+      <% }) %>
+    </ul>
+    <p>TOTAL: <%= totalValue %></p>
+
+    <div>
+      <form action="/create-order" method="POST">
+        <input type="hidden" name="total_price" value="<%= totalValue %>">
+        <button type="submit" class="btn">Order now</button>
+      </form>
+    </div>
+  <% } else { %>
+    <h2>Cart is empty!!!!!</h2>
+  <% } %> 
+
+<%- include('../partials/footer') %>

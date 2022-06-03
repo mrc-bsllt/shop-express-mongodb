@@ -1,0 +1,29 @@
+<%- include('../partials/top-document') %> 
+</head>
+
+<body>
+  <%- include('../partials/header') %>
+  <h1>ORDERS PAGE</h1> 
+
+  <% if(orders.length) { %>
+    <% orders.forEach(order => { %>
+      <div style="padding: 15px 0; border-bottom: 2px solid black">
+        <ul>
+          <li>
+            <p><strong>Order-ID:</strong> <%= order.id %></p>
+            <ul>
+              <% order.products.forEach(product => { %>
+               <li>
+                 <%= product.title %> ( <%= product.order_product.quantity %> qtà.) 
+               </li>
+              <% }) %>
+            </ul>
+          </li>
+        </ul>
+        <p style="margin-left: 15px"><strong>TOTAL:</strong> <%= order.total_price %> </p>
+      </div>
+    <% }) %>
+  <% } else { %>
+    <h2>No orders found!</h2>
+  <% } %>
+<%- include('../partials/footer') %>
