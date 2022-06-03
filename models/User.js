@@ -65,6 +65,11 @@ class User {
     
     return db.collection('users').updateOne({ _id: new ObjId(user._id) }, { $set: { cart: { products: updatedCart }}})
   }
+
+  static resetCart(user_id) {
+    const db = getDb()
+    return db.collection('users').updateOne({ _id: new ObjId(user_id) }, { $set: { cart: { products: [] }}})
+  }
 }
 
 module.exports = User

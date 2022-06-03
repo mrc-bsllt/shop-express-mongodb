@@ -50,6 +50,7 @@ const createOrder = (req, res, next) => {
   User.getCartProducts(req.user.cart).then(products => {
     const order = new Order(req.user._id, products, total_value)
     order.save().then(() => {
+      User.resetCart(req.user._id)
       res.redirect('/orders')
     }).catch(error => console.log(error))
   }).catch(error => console.log(error))
