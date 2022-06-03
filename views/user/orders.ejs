@@ -10,17 +10,17 @@
       <div style="padding: 15px 0; border-bottom: 2px solid black">
         <ul>
           <li>
-            <p><strong>Order-ID:</strong> <%= order.id %></p>
+            <p><strong>Order-ID:</strong> <%= order._id %></p>
             <ul>
               <% order.products.forEach(product => { %>
                <li>
-                 <%= product.title %> ( <%= product.order_product.quantity %> qtà.) 
+                 <%= product.title %> ( <%= product.quantity %> qtà.) 
                </li>
               <% }) %>
             </ul>
           </li>
         </ul>
-        <p style="margin-left: 15px"><strong>TOTAL:</strong> <%= order.total_price %> </p>
+        <p style="margin-left: 15px"><strong>TOTAL:</strong> <%= order.total_value %> </p>
       </div>
     <% }) %>
   <% } else { %>

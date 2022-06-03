@@ -1,5 +1,6 @@
 const Product = require('../models/Product')
 const User = require('../models/User')
+const Order = require('../models/Order')
 
 const homePage = (req, res, next) => {
   res.render('user/home-page', { path: 'homepage' })
@@ -45,26 +46,19 @@ const cartRemove = (req, res, next) => {
 }
 
 const createOrder = (req, res, next) => {
-  // const total_price = +req.body.total_price
-  // return req.USER.getCart().then(cart => {
-  //   cart.getProducts().then(products => {
-  //     req.USER.createOrder({ total_price }).then(order => {
-  //       order.addProducts(products.map(product => {
-  //         product.order_product = { quantity: product.cart_product.quantity }
-  //         return product
-  //       })).then(() => {
-  //         cart.setProducts(null)
-  //         res.redirect('/orders')
-  //       }).catch(error => console.log(error))
-  //     }).catch(error => console.log(error))
-  //   }).catch(error => console.log(error))
-  // }).catch(error => console.log(error))
+  const total_value = +req.body.total_value
+  User.getCartProducts(req.user.cart).then(products => {
+    const order = new Order(req.user._id, products, total_value)
+    order.save().then(() => {
+      res.redirect('/orders')
+    }).catch(error => console.log(error))
+  }).catch(error => console.log(error))
 }
 
 const ordersPage = (req, res, next) => {
-  // req.USER.getOrders({ include: ['products'] }).then(orders => {
-  //   res.render('user/orders', { orders, path: 'orders' })
-  // }).catch(error => console.log(error))
+  Order.getOrders(req.user._id).then(orders => {
+    res.render('user/orders', { orders, path: 'orders' })
+  }).catch(error => console.log(error))
 }
 
 module.exports = { 
