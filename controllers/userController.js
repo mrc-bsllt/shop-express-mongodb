@@ -36,34 +36,6 @@ const cartPost = (req, res, next) => {
   User.addToCart(req.user, prod_id).then(() => {
     res.redirect('/products')
   }).catch(error => console.log(error))
-
-
-  // User.addToCart(req.user, prod_id).then(() => {
-  //   res.redirect('/products')
-  // }).catch(error => console.log(error))
-
-  // req.USER.getCart().then(cart => {
-  //   cart.getProducts().then(cartProducts => { 
-  //     const prodIndex = cartProducts.findIndex(el => el.id === id)
-  //     if(prodIndex < 0) {
-
-  //       return Product.findByPk(id).then(product => {
-  //         cart.addProduct(product, { through: { CartProduct } }).then(() => {
-  //           res.redirect('/cart')
-  //         }).catch(error => console.log(error))
-  //       }).catch(error => console.log(error))
-
-  //     } else {
-
-  //       const product = cartProducts.find(el => el.id === id)
-  //       const quantity = product.cart_product.quantity + 1
-  //       cart.addProduct(product, { through: { quantity } }).then(() => {
-  //         res.redirect('/cart')
-  //       }).catch(error => console.log(error))
-
-  //     }
-  //   }).catch(error => console.log(error))
-  // }).catch(error => console.log(error))
 }
 
 const cartRemove = (req, res, next) => {
