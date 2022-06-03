@@ -53,9 +53,17 @@ class User {
         const quantity = cart.products.find(el => el.product_id.toString() === prod._id.toString()).quantity
         return { ...prod, quantity }
       })
-      
+
       return updatedProduct
     }).catch(error => console.log(error))
+  }
+
+  static removeCartProduct(user, prod_id) {
+    const db = getDb()
+    const prodIdToRemove = new ObjId(prod_id)
+    const updatedCart = user.cart.products.filter(el => el.product_id.toString() !== prodIdToRemove.toString())
+    
+    return db.collection('users').updateOne({ _id: new ObjId(user._id) }, { $set: { cart: { products: updatedCart }}})
   }
 }
 
