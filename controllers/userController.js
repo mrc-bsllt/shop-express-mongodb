@@ -1,4 +1,5 @@
 const Product = require('../models/Product')
+const User = require('../models/User')
 
 const homePage = (req, res, next) => {
   res.render('user/home-page', { path: 'homepage' })
@@ -30,7 +31,17 @@ const cartPage = (req, res, next) => {
 }
 
 const cartPost = (req, res, next) => {
-  // const id = +req.body.product_id
+  const prod_id = req.body.id
+  
+  User.addToCart(req.user, prod_id).then(() => {
+    res.redirect('/products')
+  }).catch(error => console.log(error))
+
+
+  // User.addToCart(req.user, prod_id).then(() => {
+  //   res.redirect('/products')
+  // }).catch(error => console.log(error))
+
   // req.USER.getCart().then(cart => {
   //   cart.getProducts().then(cartProducts => { 
   //     const prodIndex = cartProducts.findIndex(el => el.id === id)

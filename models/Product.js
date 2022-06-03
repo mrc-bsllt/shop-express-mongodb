@@ -3,7 +3,7 @@ const { getDb } = require('../utils/database')
 const ObjId = mongodb.ObjectId
 
 class Product {
-  constructor(title, price, image_url, description, user_id) {
+  constructor(title, price, image_url, description, user_id = null) {
     this.title = title
     this.price = typeof price === 'string' ? +price : price
     this.image_url = image_url
