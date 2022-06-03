@@ -11,11 +11,11 @@ const productsPage = (req, res, next) => {
 }
 
 const productPage = (req, res, next) => {
-  // const id = +req.params.id
-  // Product.findByPk(id)
-  //   .then(product => {
-  //     res.render('user/product', { product, path: product.title })
-  //   }).catch(error => console.log(error))
+  const id = req.params.id
+
+  Product.getProductById(id).then(product => {
+    res.render('user/product', { product, path: product.title })
+  }).catch(error => console.log(error))
 }
 
 const cartPage = (req, res, next) => {
