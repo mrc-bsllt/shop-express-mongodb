@@ -43,6 +43,20 @@ class User {
       $set: { cart: updatedCart }
     })
   }
+
+  static getCartProducts(cart) {
+    const db = getDb()
+    const prod_ids = cart.products.map(prod => prod.product_id)
+
+    return db.collection('products').find({ _id: { $in: prod_ids }}).toArray().then(products => {
+      const updatedProduct = products.map(prod => {
+        const quantity = cart.products.find(el => el.product_id.toString() === prod._id.toString()).quantity
+        return { ...prod, quantity }
+      })
+      
+      return updatedProduct
+    }).catch(error => console.log(error))
+  }
 }
 
 module.exports = User

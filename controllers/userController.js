@@ -20,14 +20,12 @@ const productPage = (req, res, next) => {
 }
 
 const cartPage = (req, res, next) => {
-  // req.USER.getCart().then(cart => {
-  //   cart.getProducts().then(products => {
-  //     let totalValue = 0
-  //     products.forEach(el => totalValue += el.price * el.cart_product.quantity)
-      
-  //     res.render('user/cart', { products, totalValue, path: 'cart' })
-  //   }).catch(error => console.log(error))
-  // }).catch(error => console.log(error))
+  User.getCartProducts(req.user.cart).then(products => {
+    let totalValue = 0
+    products.forEach(prod => totalValue += prod.price * prod.quantity)
+    
+    res.render('user/cart', { products, totalValue, path: 'cart' })
+  }).catch(error => console.log(error))
 }
 
 const cartPost = (req, res, next) => {
