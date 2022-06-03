@@ -17,8 +17,7 @@
   </div>
 
   <% if(product) { %>
-    <input type="hidden" name="id" value="<%= product.id %>" />
-    <input type="hidden" name="createdAt" value="<%= product.createdAt %>" />
+    <input type="hidden" name="id" value="<%= product._id %>" />
   <% } %>
 
   <button class="btn" type="submit"><%= product ? 'Edit Product' : 'Add product' %> </button>
