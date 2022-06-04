@@ -22,20 +22,25 @@ const productPage = (req, res, next) => {
 }
 
 const cartPage = (req, res, next) => {
-  // User.getCartProducts(req.user.cart).then(products => {
-  //   let totalValue = 0
-  //   products.forEach(prod => totalValue += prod.price * prod.quantity)
+  req.user.populate('cart.product_id').then(user => {
+    const products = user.cart
+    let totalValue = 0
 
-  //   res.render('user/cart', { products, totalValue, path: 'cart' })
-  // }).catch(error => console.log(error))
+    products.forEach(prod => totalValue += prod.product_id.price * prod.quantity)
+
+    res.render('user/cart', { products, totalValue, path: 'cart' })
+    console.log(user.cart)
+  }).catch(error => console.log(error))
 }
 
 const cartPost = (req, res, next) => {
   const prod_id = req.body.id
   
-//   User.addToCart(req.user, prod_id).then(() => {
-//     res.redirect('/products')
-//   }).catch(error => console.log(error))
+  Product.findById(prod_id).then(product => {
+    req.user.addToCart(product).then(() => {
+      res.redirect('/products')
+    }).catch(error => console.log(error))
+  }).catch(error => console.log(error))
 }
 
 const cartRemove = (req, res, next) => {

@@ -23,4 +23,18 @@ const userSchema = new Schema({
   }]
 })
 
+userSchema.methods.addToCart = function(product) {
+  const cartProdIndex = this.cart.findIndex(prod => prod.product_id.toString() === product._id.toString())
+  const quantity = cartProdIndex < 0 ? 1 : this.cart[cartProdIndex].quantity + 1
+
+  if(cartProdIndex < 0) {
+    this.cart = [ ...this.cart, { product_id: product, quantity }]
+  } else {
+    this.cart[cartProdIndex].quantity = quantity
+    this.cart = [ ...this.cart]
+  }
+
+  return this.save()
+}
+
 module.exports = mongoose.model('User', userSchema)
