@@ -2,7 +2,7 @@ const Product = require('../models/Product')
 
 // GET admin products list
 const productsPage = (req, res, next) => {
-  Product.fetchAll().then(products => {
+  Product.find().then(products => {
       res.render('admin/products', { products, path: 'admin-products' })
     }).catch(error => console.log(error))
 }
@@ -10,8 +10,8 @@ const productsPage = (req, res, next) => {
 // Add product POST
 const addProduct = (req, res, next) => {
   const { title, price, image_url, description } = req.body
-  const user_id = req.user._id
-  const product = new Product(title, price, image_url, description, user_id)
+  const user_id = req.user
+  const product = new Product({ title, price, image_url, description, user_id })
 
   product.save().then(() => {
       res.redirect('/admin/products')
@@ -25,30 +25,30 @@ const addProductPage = (req, res, next) => {
 
 // GET edit product page
 const editProductPage = (req, res, next) => {
-  const id = req.params.id
+  // const id = req.params.id
 
-  Product.getProductById(id).then(product => {
-    res.render('admin/edit-product', { product, path: 'edit-product' })
-  }).catch(error => console.log(error))
+  // Product.getProductById(id).then(product => {
+  //   res.render('admin/edit-product', { product, path: 'edit-product' })
+  // }).catch(error => console.log(error))
 }
 // POST edit product
 const editProduct = (req, res, next) => { 
-  const { id, title, image_url, price, description } = req.body
-  const user_id = req.user._id
-  const product = new Product(title, price, image_url, description, user_id)
+  // const { id, title, image_url, price, description } = req.body
+  // const user_id = req.user._id
+  // const product = new Product(title, price, image_url, description, user_id)
 
-  product.update(id).then(() => {
-    res.redirect('/admin/products')
-  }).catch(error => console.log(error))
+  // product.update(id).then(() => {
+  //   res.redirect('/admin/products')
+  // }).catch(error => console.log(error))
 }
 
 // POST delete product
 const deleteProduct = (req, res, next) => {
-  const prod_id = req.body.id
+  // const prod_id = req.body.id
 
-  Product.deleteById(prod_id, req.user.cart).then(() => {
-    res.redirect('/admin/products')
-  }).catch(error => console.log(error))
+  // Product.deleteById(prod_id, req.user.cart).then(() => {
+  //   res.redirect('/admin/products')
+  // }).catch(error => console.log(error))
 }
 
 module.exports = { addProduct, addProductPage, editProductPage, editProduct, productsPage, deleteProduct }

@@ -1,5 +1,5 @@
-const mongoose = require('moongose')
-const Schema = moongose.Schema
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 const productSchema = new Schema({
   title: {
@@ -25,4 +25,4 @@ const productSchema = new Schema({
   }
 })
 
-module.exports = moongose.model('Product', productSchema)
+module.exports = mongoose.model('Product', productSchema)
