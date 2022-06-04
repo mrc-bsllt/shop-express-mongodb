@@ -1,24 +1,29 @@
-const mongodb = require('mongodb')
-const { getDb } = require('../utils/database')
-const ObjId = mongodb.ObjectId
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
-class Order {
-  constructor(user_id, products, total_value) {
-    this.user_id = user_id
-    this.products = products
-    this.total_value = total_value
+const orderSchema = new Schema({
+  user_id: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    require: true
+  },
+  products: [
+    {
+      product_id: { 
+        type: Schema.Types.ObjectId,
+        ref: 'Product',
+        required: true
+       },
+      quantity: {
+        type: Number,
+        required: true
+      }
+    }
+  ],
+  total_value: {
+    type: Number,
+    required: true
   }
+})
 
-  save() {
-    const db = getDb()
-    return db.collection('orders').insertOne(this)
-  }
-
-  static getOrders(user_id) {
-    const db = getDb()
-
-    return db.collection('orders').find({ user_id: new ObjId(user_id) }).toArray()
-  }
-}
-
-module.exports = Order
+module.exports = mongoose.model('Order', orderSchema)

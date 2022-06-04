@@ -1,6 +1,5 @@
 const Product = require('../models/Product')
-const User = require('../models/User')
-// const Order = require('../models/Order')
+const Order = require('../models/Order')
 
 const homePage = (req, res, next) => {
   console.log('FIRED HOMEPAGE')
@@ -53,20 +52,24 @@ const cartRemove = (req, res, next) => {
 }
 
 const createOrder = (req, res, next) => {
+  const user_id = req.user
   const total_value = +req.body.total_value
-  // User.getCartProducts(req.user.cart).then(products => {
-  //   const order = new Order(req.user._id, products, total_value)
-  //   order.save().then(() => {
-  //     User.resetCart(req.user._id)
-  //     res.redirect('/orders')
-  //   }).catch(error => console.log(error))
-  // }).catch(error => console.log(error))
+
+  const products = req.user.cart.map(el => {
+    return { product_id: el.product_id, quantity: el.quantity }
+  })
+
+  const order = new Order({ user_id, products, total_value })
+  order.save().then(() => {
+    req.user.resetCart()
+    res.redirect('/orders')
+  }).catch(error => console.log(error))
 }
 
 const ordersPage = (req, res, next) => {
-  // Order.getOrders(req.user._id).then(orders => {
-  //   res.render('user/orders', { orders, path: 'orders' })
-  // }).catch(error => console.log(error))
+  Order.find({ user_id: req.user._id }).populate('products.product_id').populate('user_id', '-cart').then(orders => {
+    res.render('user/orders', { orders, path: 'orders' })
+  }).catch(error => console.log(error))
 }
 
 module.exports = { 

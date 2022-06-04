@@ -14,7 +14,7 @@
             <ul>
               <% order.products.forEach(product => { %>
                <li>
-                 <%= product.title %> ( <%= product.quantity %> qtà.) 
+                 <%= product.product_id.title %> ( <%= product.quantity %> qtà.) 
                </li>
               <% }) %>
             </ul>
@@ -26,4 +26,5 @@
   <% } else { %>
     <h2>No orders found!</h2>
   <% } %>
+  
 <%- include('../partials/footer') %>

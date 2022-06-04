@@ -2,7 +2,7 @@ const Product = require('../models/Product')
 
 // GET admin products list
 const productsPage = (req, res, next) => {
-  Product.find().then(products => {
+  Product.find({ user_id: req.user._id }).then(products => {
       res.render('admin/products', { products, path: 'admin-products' })
     }).catch(error => console.log(error))
 }

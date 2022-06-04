@@ -44,4 +44,9 @@ userSchema.methods.removeToCart = function(product) {
   return this.save()
 }
 
+userSchema.methods.resetCart = function() {
+  this.cart = []
+  return this.save()
+}
+
 module.exports = mongoose.model('User', userSchema)
