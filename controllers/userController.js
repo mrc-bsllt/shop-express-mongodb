@@ -45,7 +45,7 @@ const cartRemove = (req, res, next) => {
   const prod_id = req.body.id
   
   Product.findById(prod_id).then(product => {
-    return req.user.removeToCart(product)
+    return req.user.removeToCart(product._id)
   }).then(() => {
     res.redirect('/cart')
   }).catch(error => console.log(error))

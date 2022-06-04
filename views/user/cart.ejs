@@ -9,7 +9,7 @@
     <ul>
       <% products.forEach(product => { %>
        <li>
-         <%= product.title %> - <strong>Quantity: <%= product.quantity %></strong>
+         <%= product.product_id.title %> - <strong>Quantity: <%= product.quantity %></strong>
          <form action="/cart/remove" method="POST">
            <input type="hidden" name="id" value="<%= product.product_id._id %>">
            <button type="submit">Remove</button>

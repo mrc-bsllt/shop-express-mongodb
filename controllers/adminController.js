@@ -52,8 +52,16 @@ const editProduct = (req, res, next) => {
 const deleteProduct = (req, res, next) => {
   const prod_id = req.body.id
 
-  Product.findOneAndDelete(prod_id).then(() => {
-    res.redirect('/admin/products')
+  Product.findOneAndDelete(prod_id).then(product => {
+    const isInCart = req.user.cart.findIndex(prod => prod.product_id.toString() === product._id.toString()) > -1
+    
+    if(isInCart) {
+      req.user.removeToCart(product._id).then(() => {
+        res.redirect('/admin/products')
+      }).catch(error => console.log(error))
+    } else {
+      res.redirect('/admin/products')
+    }
   }).catch(error => console.log(error))
 }
 
