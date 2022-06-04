@@ -25,21 +25,27 @@ const addProductPage = (req, res, next) => {
 
 // GET edit product page
 const editProductPage = (req, res, next) => {
-  // const id = req.params.id
+  const id = req.params.id
 
-  // Product.getProductById(id).then(product => {
-  //   res.render('admin/edit-product', { product, path: 'edit-product' })
-  // }).catch(error => console.log(error))
+  Product.findById(id).then(product => {
+    res.render('admin/edit-product', { product, path: 'edit-product' })
+  }).catch(error => console.log(error))
 }
 // POST edit product
 const editProduct = (req, res, next) => { 
-  // const { id, title, image_url, price, description } = req.body
-  // const user_id = req.user._id
-  // const product = new Product(title, price, image_url, description, user_id)
+  const { id, title, image_url, price, description } = req.body
+  const user_id = req.user
 
-  // product.update(id).then(() => {
-  //   res.redirect('/admin/products')
-  // }).catch(error => console.log(error))
+  Product.findById(id).then(product => {
+    product.title = title
+    product.image_url = image_url
+    product.price = price
+    product.description = description
+    product.user_id = user_id
+    return product.save()
+  }).then(() => {
+    res.redirect('/admin/products')
+  }).catch(error => console.log(error))
 }
 
 // POST delete product
