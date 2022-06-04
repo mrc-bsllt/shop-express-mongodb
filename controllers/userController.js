@@ -27,9 +27,8 @@ const cartPage = (req, res, next) => {
     let totalValue = 0
 
     products.forEach(prod => totalValue += prod.product_id.price * prod.quantity)
-
+    
     res.render('user/cart', { products, totalValue, path: 'cart' })
-    console.log(user.cart)
   }).catch(error => console.log(error))
 }
 
@@ -44,11 +43,13 @@ const cartPost = (req, res, next) => {
 }
 
 const cartRemove = (req, res, next) => {
-//   const prod_id = req.body.id
-
-//   User.removeCartProduct(req.user, prod_id).then(() => {
-//     res.redirect('/cart')
-//   }).catch(error => console.log(error))
+  const prod_id = req.body.id
+  
+  Product.findById(prod_id).then(product => {
+    return req.user.removeToCart(product)
+  }).then(() => {
+    res.redirect('/cart')
+  }).catch(error => console.log(error))
 }
 
 const createOrder = (req, res, next) => {

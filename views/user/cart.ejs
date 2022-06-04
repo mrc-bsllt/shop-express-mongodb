@@ -11,7 +11,7 @@
        <li>
          <%= product.title %> - <strong>Quantity: <%= product.quantity %></strong>
          <form action="/cart/remove" method="POST">
-           <input type="hidden" name="id" value="<%= product._id %>">
+           <input type="hidden" name="id" value="<%= product.product_id._id %>">
            <button type="submit">Remove</button>
          </form>
         </li>
