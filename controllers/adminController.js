@@ -50,11 +50,11 @@ const editProduct = (req, res, next) => {
 
 // POST delete product
 const deleteProduct = (req, res, next) => {
-  // const prod_id = req.body.id
+  const prod_id = req.body.id
 
-  // Product.deleteById(prod_id, req.user.cart).then(() => {
-  //   res.redirect('/admin/products')
-  // }).catch(error => console.log(error))
+  Product.findOneAndDelete(prod_id).then(() => {
+    res.redirect('/admin/products')
+  }).catch(error => console.log(error))
 }
 
 module.exports = { addProduct, addProductPage, editProductPage, editProduct, productsPage, deleteProduct }
