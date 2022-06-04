@@ -55,19 +55,23 @@ const createOrder = (req, res, next) => {
   const user_id = req.user
   const total_value = +req.body.total_value
 
-  const products = req.user.cart.map(el => {
-    return { product_id: el.product_id, quantity: el.quantity }
-  })
-
-  const order = new Order({ user_id, products, total_value })
-  order.save().then(() => {
-    req.user.resetCart()
-    res.redirect('/orders')
+  const prod_ids = req.user.cart.map(item => item.product_id)
+  Product.find({ _id: { $in: prod_ids }}).then(products => {
+    const updatedProducts = products.map(item => {
+      const quantity = req.user.cart.find(el => el.product_id.toString() === item._id.toString()).quantity
+      return { product: { ...item }, quantity }
+    })
+    
+    const order = new Order({ user_id, products: updatedProducts, total_value })
+    order.save().then(() => {
+      req.user.resetCart()
+      res.redirect('/orders')
+    }).catch(error => console.log(error))
   }).catch(error => console.log(error))
 }
 
 const ordersPage = (req, res, next) => {
-  Order.find({ user_id: req.user._id }).populate('products.product_id').populate('user_id', '-cart').then(orders => {
+  Order.find({ user_id: req.user._id }).populate('user_id', '-cart').then(orders => {
     res.render('user/orders', { orders, path: 'orders' })
   }).catch(error => console.log(error))
 }
