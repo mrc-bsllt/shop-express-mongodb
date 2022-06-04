@@ -22,7 +22,9 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 const { userRoutes } = require('./routes/user')
 const { adminRoutes } = require('./routes/admin')
+const { authRoutes } = require('./routes/auth')
 
+app.use(authRoutes)
 app.use(userRoutes)
 app.use('/admin', adminRoutes)
 app.use('/', (req, res, next) => {

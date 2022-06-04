@@ -1,25 +1,28 @@
 <%- include('../partials/top-document') %> 
+<link rel="stylesheet" href="/css/cart.css">
 </head>
 
 <body>
-  <%- include('../partials/header') %>
-  <h1>CART PAGE</h1> 
+  <%- include('../partials/header') %> 
 
   <% if(products.length) { %>
-    <ul>
+    <ul class="cart__item-list">
       <% products.forEach(product => { %>
-       <li>
-         <%= product.product_id.title %> - <strong>Quantity: <%= product.quantity %></strong>
-         <form action="/cart/remove" method="POST">
-           <input type="hidden" name="id" value="<%= product.product_id._id %>">
-           <button type="submit">Remove</button>
-         </form>
+       <li class="cart__item">
+          <h2><%= product.product_id.title %></h2>
+          <h3>Quantity: <%= product.quantity %></h3>
+          <form action="/cart/remove" method="POST">
+            <input type="hidden" name="id" value="<%= product.product_id._id %>">
+            <button type="submit" class="btn danger">Delete</button>
+          </form>
         </li>
       <% }) %>
     </ul>
-    <p>TOTAL: <%= totalValue %></p>
 
-    <div>
+    <p>TOTAL: <%= totalValue %> $</p>
+    <hr>
+
+    <div class="centered">
       <form action="/create-order" method="POST">
         <input type="hidden" name="total_value" value="<%= totalValue %>">
         <button type="submit" class="btn">Order now</button>
