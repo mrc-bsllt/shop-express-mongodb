@@ -50,16 +50,7 @@ app.use('/', (req, res, next) => {
 })
 
 mongoose.connect(`${MONGODB_URI}?retryWrites=true&w=majority`).then(() => {
-  User.find().then(users => {
-    if(!users.length) {
-      const user = new User({ username: 'mrc-bsllt', email: 'mrc@test.com', cart: [] })
-      user.save().then(() => {
-        app.listen(3000)
-      }).catch(error => console.log(error))
-    } else {
-      app.listen(3000)
-    }
-  }).catch(error => console.log(error))
+  app.listen(3000)
 }).catch(error => console.log(error))
 
   
