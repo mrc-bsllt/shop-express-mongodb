@@ -11,7 +11,9 @@
     </div>
     <h2><%= product.price %></h2>
     <p><%= product.description %></p>
-    <%- include('../partials/add-to-cart') %> 
+    <% if(user) { %>
+      <%- include('../partials/add-to-cart', { product }) %>
+    <% } %>
   </main>
 
 <%- include('../partials/footer') %>

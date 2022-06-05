@@ -21,7 +21,9 @@
                     </div>
                     <div class="card__actions">
                         <a href="/products/<%= product._id %>" class="btn">Detail</a>
-                        <%- include('../partials/add-to-cart', { product }) %>
+                        <% if(user) { %>
+                            <%- include('../partials/add-to-cart', { product }) %>
+                        <% } %>
                     </div>
                 </article>
             <% }) %>

@@ -2,13 +2,12 @@ const Product = require('../models/Product')
 const Order = require('../models/Order')
 
 const homePage = (req, res, next) => {
-  console.log('FIRED HOMEPAGE')
-  res.render('user/home-page', { path: 'homepage' })
+  res.render('user/home-page', { path: 'homepage', user: req.session.user })
 }
 
 const productsPage = (req, res, next) => {
   Product.find().then(products => {
-    res.render('user/products', { products, path: 'products' })
+    res.render('user/products', { products, path: 'products', user: req.session.user })
   }).catch(error => console.log(error))
 }
 
@@ -16,7 +15,7 @@ const productPage = (req, res, next) => {
   const id = req.params.id
 
   Product.findById(id).then(product => {
-    res.render('user/product', { product, path: product.title })
+    res.render('user/product', { product, path: product.title, user: req.session.user })
   }).catch(error => console.log(error))
 }
 
@@ -27,7 +26,7 @@ const cartPage = (req, res, next) => {
 
     products.forEach(prod => totalValue += prod.product_id.price * prod.quantity)
     
-    res.render('user/cart', { products, totalValue, path: 'cart' })
+    res.render('user/cart', { products, totalValue, path: 'cart', user: req.session.user })
   }).catch(error => console.log(error))
 }
 
@@ -52,7 +51,7 @@ const cartRemove = (req, res, next) => {
 }
 
 const createOrder = (req, res, next) => {
-  const user_id = req.user
+  const user_id = req.session.user
   const total_value = +req.body.total_value
 
   const prod_ids = req.user.cart.map(item => item.product_id)
@@ -71,8 +70,8 @@ const createOrder = (req, res, next) => {
 }
 
 const ordersPage = (req, res, next) => {
-  Order.find({ user_id: req.user._id }).populate('user_id', '-cart').then(orders => {
-    res.render('user/orders', { orders, path: 'orders' })
+  Order.find({ user_id: req.session.user._id }).populate('user_id', '-cart').then(orders => {
+    res.render('user/orders', { orders, path: 'orders', user: req.session.user })
   }).catch(error => console.log(error))
 }
 
