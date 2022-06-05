@@ -13,6 +13,13 @@ const POST_login = (req, res, next) => {
     }).catch(error => console.log(error))
 }
 
+const GET_signup = (req, res, next) => {
+    res.render('auth/signup', { path: 'signup', user: req.session.user })
+}
+const POST_signup = (req, res, next) => {
+ // ...
+}
+
 const POST_logout = (req, res, next) => {
     req.session.destroy(error => {
         if(error) console.log(error)
@@ -20,4 +27,4 @@ const POST_logout = (req, res, next) => {
     })
 }
 
-module.exports = { GET_login, POST_login, POST_logout }
+module.exports = { GET_login, POST_login, POST_logout, GET_signup, POST_signup }
