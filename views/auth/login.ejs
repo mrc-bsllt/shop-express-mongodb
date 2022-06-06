@@ -6,8 +6,12 @@
 <body>
   <%- include('../partials/header') %>
 
-  <% if(error.length) { %>
-    <p class="user-message user-message--error"><%= error %></p>
+  <% if(errors.length) { %>
+    <ul class="centered">
+        <% errors.forEach(error => { %>
+            <li class="user-message user-message--error"><%= error.msg ? error.msg : error %></li>
+        <% }) %>
+    </ul>
   <% } %>
   
   <form class="product-form" action="/login" method="POST">

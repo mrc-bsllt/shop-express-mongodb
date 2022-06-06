@@ -7,11 +7,15 @@
    <%- include('../partials/header') %>
 
     <main>
-        <% if(error.length) { %>
-            <p class="user-message user-message--error"><%= error %></p>
+        <% if(errors.length) { %>
+            <ul class="centered">
+                <% errors.forEach(error => { %>
+                    <li class="user-message user-message--error"><%= error.msg ? error.msg : error %></li>
+                <% }) %>
+            </ul>
         <% } %>
 
-        <form class="login-form" action="/signup" method="POST">
+        <form class="login-form" action="/signup" method="POST" novalidate>
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <div class="form-control">
                 <label for="email">E-Mail</label>
