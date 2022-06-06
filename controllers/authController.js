@@ -109,4 +109,32 @@ const POST_restorePassword = (req, res, next) => {
     })
 }
 
-module.exports = { GET_login, POST_login, POST_logout, GET_signup, POST_signup, GET_restorePassword, POST_restorePassword }
+const GET_resetPassword = (req, res, next) => {
+    if(!req.params.reset_token) {
+        res.redirect('/signup')
+    } else {
+        const { reset_token } = req.params
+        User.findOne({ reset_token, token_expire: { $gt: Date.now() }}).then(user => {
+            res.render('auth/reset-password', { path: 'reset-password', errors: [], user_id: user._id, reset_token: user.reset_token })
+        }).catch(error => console.log(error))
+    }
+}
+const POST_resetPassword = (req, res, next) => {
+    const { user_id, reset_token, new_password } = req.body
+    User.findOne({ _id: user_id, reset_token, token_expire: { $gt: Date.now() }}).then(user => {
+        if(!user) {
+            res.redirect('/signup')
+        } else {
+            bcrypt.hash(new_password, 12).then(hashed_password => {
+                user.password = hashed_password
+                user.reset_token = undefined
+                user.token_expire = undefined
+                user.save().then(() => {
+                    res.redirect('/login')
+                }).catch(error => console.log(error))
+            }).catch(error => console.log(error))
+        }
+    }).catch(error => console.log(error))
+}
+
+module.exports = { GET_login, POST_login, POST_logout, GET_signup, POST_signup, GET_restorePassword, POST_restorePassword, GET_resetPassword, POST_resetPassword }

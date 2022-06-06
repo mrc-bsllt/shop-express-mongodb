@@ -12,7 +12,9 @@ const {
   GET_signup, 
   POST_signup, 
   GET_restorePassword, 
-  POST_restorePassword 
+  POST_restorePassword,
+  GET_resetPassword,
+  POST_resetPassword
 } = require('../controllers/authController')
 
 router.get('/login', GET_login)
@@ -80,4 +82,6 @@ router.post('/restore-password',
   POST_restorePassword
 )
 
+router.get('/reset-password/:reset_token', GET_resetPassword)
+router.post('/reset-password/', POST_resetPassword)
 module.exports = { authRoutes: router }
