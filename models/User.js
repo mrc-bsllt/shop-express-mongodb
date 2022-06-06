@@ -20,7 +20,15 @@ const userSchema = new Schema({
       type: Number,
       required: true
     }
-  }]
+  }],
+  reset_token: {
+    type: String,
+    required: false
+  },
+  token_expire: {
+    type: Date,
+    required: false
+  }
 })
 
 userSchema.methods.addToCart = function(product) {

@@ -5,7 +5,15 @@ const router = express.Router()
 
 const User = require('../models/User')
 
-const { GET_login, POST_login, POST_logout, GET_signup, POST_signup } = require('../controllers/authController')
+const { 
+  GET_login, 
+  POST_login, 
+  POST_logout, 
+  GET_signup, 
+  POST_signup, 
+  GET_restorePassword, 
+  POST_restorePassword 
+} = require('../controllers/authController')
 
 router.get('/login', GET_login)
 router.post('/login', 
@@ -57,5 +65,19 @@ router.post('/signup',
 )
 
 router.post('/logout', POST_logout)
+
+router.get('/restore-password', GET_restorePassword)
+router.post('/restore-password', 
+  check('email')
+    .not().isEmpty().withMessage('Email is required!').bail()
+    .isEmail().withMessage('Invalid Email!').bail()
+    .custom(async (email) => {
+      const user = await User.findOne({ email })
+      if(!user) {
+        return Promise.reject('User does not exist!')
+      }
+    }),
+  POST_restorePassword
+)
 
 module.exports = { authRoutes: router }
