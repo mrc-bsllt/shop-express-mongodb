@@ -51,10 +51,8 @@ const editProduct = (req, res, next) => {
 // POST delete product
 const deleteProduct = (req, res, next) => {
   const prod_id = req.body.id
-  console.log('prod_id', prod_id)
 
   Product.findOneAndDelete({ _id: prod_id }).then(product => {
-    console.log('PRODUCT', product)
     const isInCart = req.user.cart.findIndex(prod => prod.product_id.toString() === product._id.toString()) > -1
     
     if(isInCart) {

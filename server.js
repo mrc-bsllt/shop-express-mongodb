@@ -50,7 +50,7 @@ app.use((req, res, next) => {
     User.findById(req.session.user._id).then(user => {
       req.user = user
       next()
-    }).catch(error => console.log(user))
+    }).catch(error => console.log(error))
   } else {
     next()
   }
