@@ -9,7 +9,7 @@
   <% if(errors.length) { %>
     <ul class="centered">
         <% errors.forEach(error => { %>
-            <li class="user-message user-message--error"><%= error.msg ? error.msg : error %></li>
+            <li class="user-message user-message--error"><%= error.msg %></li>
         <% }) %>
     </ul>
   <% } %>
@@ -18,11 +18,23 @@
     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
     <div class="form-control">
         <label for="title">Email</label>
-        <input type="text" name="email" id="email">
+        <input 
+          type="text" 
+          name="email" 
+          id="email" 
+          value="<%= old_value ? old_value.email : '' %>"
+          class="<%= errors.find(el => el && el.param === 'email') ? 'invalid' : '' %>"
+          >
     </div>
     <div class="form-control">
         <label for="image_url">Password</label>
-        <input type="password" name="password" id="password">
+        <input 
+          type="password" 
+          name="password" 
+          id="password" 
+          value="<%= old_value ? old_value.password : '' %>"
+          class="<%= errors.find(el => el && el.param === 'password') ? 'invalid' : '' %>"
+          >
     </div>
 
     <button class="btn" type="submit">Login</button>

@@ -15,7 +15,7 @@ router.post('/login',
     .custom(async (email) => {
       const user = await User.findOne({ email })
       if(!user) {
-        return Promise.reject('This email doesn\'t exist yet!')
+        return Promise.reject('Invalid email!')
       }
     }).bail(), 
   check('password', 'Invalid password!')
@@ -23,10 +23,10 @@ router.post('/login',
     .custom(async (password, { req }) => {
       const { email } = req.body
       const user = await User.findOne({ email })
-      const isValidPassword = await bcrypt.compare(password, user.password)
+      const isValidPassword = user ? await bcrypt.compare(password, user.password) : null
       
       if(!isValidPassword) {
-        return Promise.reject('WRONG PASSWORD!')
+        return Promise.reject('Invalid password!')
       }
     }).bail(),
   POST_login
@@ -44,10 +44,11 @@ router.post('/signup',
       }
     }), 
   check('password', 'Password does not respect the mandatory characters')
-    .isStrongPassword({ minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1 })
+    .isStrongPassword({ minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1 }),
+  check('confirm_password')
     .custom((value, { req }) => {
-      if(value !== req.body.confirm_password) {
-        throw new Error("password filed doesn't match with confirm_password field")
+      if(!req.body.password || value !== req.body.password) {
+        throw new Error("password field doesn't match with confirm_password field")
       } else {
         return value
       }

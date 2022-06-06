@@ -7,15 +7,16 @@ const { validationResult } = require('express-validator')
 const User = require('../models/User')
 
 const GET_login = (req, res, next) => {
-    res.render('auth/login', { path: 'login', errors: req.flash('errors') })
+    res.render('auth/login', { path: 'login', errors: [], old_value: null })
 }
 const POST_login = (req, res, next) => {
+    const { email, password } = req.body
+
     const errors = validationResult(req)
     if(!errors.isEmpty()) {
-        return res.status(422).render('auth/login', { path: 'login', errors: errors.array() })
+        return res.status(422).render('auth/login', { path: 'login', errors: errors.array(), old_value: { email, password } })
     }
 
-    const { email } = req.body
     User.findOne({ email }).then(user => {
         req.session.user = user
         req.session.save(error => {
@@ -26,15 +27,16 @@ const POST_login = (req, res, next) => {
 }
 
 const GET_signup = (req, res, next) => {
-    res.render('auth/signup', { path: 'signup', errors: req.flash('errors') })
+    res.render('auth/signup', { path: 'signup', errors: [], old_value: null })
 }
 const POST_signup = async (req, res, next) => {
+    const { email, password } = req.body
+
     const errors = validationResult(req)
     if(!errors.isEmpty()) {
-        return res.status(422).render('auth/signup', { path: 'signup', errors: errors.array() })
+        console.log(errors.array())
+        return res.status(422).render('auth/signup', { path: 'signup', errors: errors.array(), old_value: { email, password } })
     }
-
-    const { email, password } = req.body
     
     bcrypt.hash(password, 12).then(hash_password => {
         const newUser = new User({ email, password: hash_password, cart: [] })
