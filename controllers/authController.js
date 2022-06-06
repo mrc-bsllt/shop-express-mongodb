@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs')
 
 const sendGrid = require('@sendgrid/mail')
-sendGrid.setApiKey('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')
+sendGrid.setApiKey(process.env.MAIL_KEY)
 
 const User = require('../models/User')
 
@@ -62,10 +62,9 @@ const POST_signup = (req, res, next) => {
                     sendGrid.send(message, (error, info) => {
                         if(error) {
                             console.log(error.response.body.errors)
-                        } else {
-                            res.redirect('/products')
                         }
                     })
+                    res.redirect('/products')
                 })
             }).catch(error => console.log(error))
         })
