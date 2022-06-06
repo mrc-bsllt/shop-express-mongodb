@@ -3,7 +3,7 @@ const Product = require('../models/Product')
 // GET admin products list
 const productsPage = (req, res, next) => {
   Product.find({ user_id: req.session.user._id }).then(products => {
-      res.render('admin/products', { products, path: 'admin-products', user: req.session.user })
+      res.render('admin/products', { products, path: 'admin-products' })
     }).catch(error => console.log(error))
 }
 
@@ -20,7 +20,7 @@ const addProduct = (req, res, next) => {
 
 // GET add product form page
 const addProductPage = (req, res, next) => {
-  res.render('admin/add-product', { path: 'add-product', user: req.session.user })
+  res.render('admin/add-product', { path: 'add-product' })
 }
 
 // GET edit product page
@@ -28,7 +28,7 @@ const editProductPage = (req, res, next) => {
   const id = req.params.id
 
   Product.findById(id).then(product => {
-    res.render('admin/edit-product', { product, path: 'edit-product', user: req.session.user })
+    res.render('admin/edit-product', { product, path: 'edit-product' })
   }).catch(error => console.log(error))
 }
 // POST edit product

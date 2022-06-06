@@ -4,6 +4,8 @@ const mongoose = require('mongoose')
 const session = require('express-session')
 const MongoDBstore = require('connect-mongodb-session')(session)
 const bodyParser = require('body-parser')
+const csrf = require('csurf')
+const csrfProtection = csrf()
 
 const MONGODB_URI = 'mongodb+srv://mrc-bsllt:marcodevelon@cluster0.niomo.mongodb.net/shop'
 
@@ -12,20 +14,22 @@ const User = require('./models/User')
 
 const app = express()
 
+app.use(bodyParser.urlencoded({ extended: false }))
+app.set('view engine', 'ejs')
+app.use(express.static(path.join(__dirname, 'public')))
+
 const store = new MongoDBstore({
   uri: MONGODB_URI,
   collection: 'sessions'
 })
+
 app.use(session({
   secret: 'my secret',
   resave: false,
   saveUninitialized: false,
   store
 }))
-
-app.use(bodyParser.urlencoded({ extended: false }))
-app.set('view engine', 'ejs')
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(csrfProtection)
 
 const { userRoutes } = require('./routes/user')
 const { adminRoutes } = require('./routes/admin')
@@ -42,11 +46,17 @@ app.use((req, res, next) => {
   }
 })
 
+app.use((req, res, next) => { // Con res.locals posso passare delle variabili a tutte le viste che verranno renderizzate
+  res.locals.user = req.session.user
+  res.locals.csrfToken = req.csrfToken()
+  next()
+})
+
 app.use(authRoutes)
 app.use(userRoutes)
 app.use('/admin', adminRoutes)
 app.use('/', (req, res, next) => {
-  res.status(404).render('404', { path: '404', user: req.session.user })
+  res.status(404).render('404', { path: '404' })
 })
 
 mongoose.connect(`${MONGODB_URI}?retryWrites=true&w=majority`).then(() => {

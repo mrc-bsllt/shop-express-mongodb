@@ -2,7 +2,7 @@ const User = require('../models/User')
 const bcrypt = require('bcryptjs')
 
 const GET_login = (req, res, next) => {
-    res.render('auth/login', { path: 'login', user: req.session.user })
+    res.render('auth/login', { path: 'login' })
 }
 const POST_login = (req, res, next) => {
     const { email, password } = req.body
@@ -28,7 +28,7 @@ const POST_login = (req, res, next) => {
 }
 
 const GET_signup = (req, res, next) => {
-    res.render('auth/signup', { path: 'signup', user: req.session.user })
+    res.render('auth/signup', { path: 'signup' })
 }
 const POST_signup = (req, res, next) => {
     const { email, password, confirm_password } = req.body

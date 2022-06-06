@@ -1,6 +1,8 @@
 const express = require('express')
 const router = express.Router()
 
+const is_auth = require('../middleware/is_auth')
+
 const { addProduct, 
         addProductPage, 
         editProductPage,
@@ -8,14 +10,14 @@ const { addProduct,
         productsPage,
         deleteProduct } = require('../controllers/adminController')
 
-router.post('/add-product', addProduct)
-router.get('/add-product', addProductPage)
+router.post('/add-product', is_auth, addProduct)
+router.get('/add-product', is_auth, addProductPage)
 
-router.get('/edit/:id', editProductPage)
-router.post('/edit-product', editProduct)
+router.get('/edit/:id', is_auth, editProductPage)
+router.post('/edit-product', is_auth, editProduct)
 
-router.get('/products', productsPage)
+router.get('/products', is_auth, productsPage)
 
-router.post('/delete', deleteProduct)
+router.post('/delete', is_auth, deleteProduct)
 
 module.exports = { adminRoutes: router }
