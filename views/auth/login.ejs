@@ -6,6 +6,10 @@
 <body>
   <%- include('../partials/header') %>
 
+  <% if(error.length) { %>
+    <p class="user-message user-message--error"><%= error %></p>
+  <% } %>
+  
   <form class="product-form" action="/login" method="POST">
     <input type="hidden" name="_csrf" value="<%= csrfToken %>">
     <div class="form-control">
@@ -18,9 +22,6 @@
     </div>
 
     <button class="btn" type="submit">Login</button>
-    <% if(error) { %>
-     <p style="color: red"><%= error %> </p>
-    <% } %>
   </form>
 
 <%- include('../partials/footer') %>
