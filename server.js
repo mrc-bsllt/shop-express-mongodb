@@ -6,6 +6,7 @@ const MongoDBstore = require('connect-mongodb-session')(session)
 const bodyParser = require('body-parser')
 const csrf = require('csurf')
 const csrfProtection = csrf()
+const flash = require('connect-flash')
 
 const MONGODB_URI = 'mongodb+srv://mrc-bsllt:marcodevelon@cluster0.niomo.mongodb.net/shop'
 
@@ -30,6 +31,8 @@ app.use(session({
   store
 }))
 app.use(csrfProtection)
+app.use(flash()) // Serve per creare delle sessioni flash (quindi vengono cancellate dopo l'utilizzo). In questo caso le utilizzo per mandare gli errori che potrebbero essere generati dall'utente in fase di login/signup
+
 
 const { userRoutes } = require('./routes/user')
 const { adminRoutes } = require('./routes/admin')

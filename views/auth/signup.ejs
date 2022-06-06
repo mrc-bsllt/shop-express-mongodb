@@ -22,6 +22,9 @@
                 <input type="password" name="confirm_password" id="confirm_password">
             </div>
             <button class="btn" type="submit">Sign up</button>
+            <% if(error) { %>
+                <p style="color: red"><%= error %> </p>
+            <% } %>
         </form>
     </main>
 <%- include('../partials/footer') %>

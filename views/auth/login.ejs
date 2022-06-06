@@ -18,6 +18,9 @@
     </div>
 
     <button class="btn" type="submit">Login</button>
+    <% if(error) { %>
+     <p style="color: red"><%= error %> </p>
+    <% } %>
   </form>
 
 <%- include('../partials/footer') %>
