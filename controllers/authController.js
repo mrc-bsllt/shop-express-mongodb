@@ -1,5 +1,9 @@
-const User = require('../models/User')
 const bcrypt = require('bcryptjs')
+
+const sendGrid = require('@sendgrid/mail')
+sendGrid.setApiKey('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')
+
+const User = require('../models/User')
 
 const GET_login = (req, res, next) => {
     res.render('auth/login', { path: 'login', error: req.flash('error') })
@@ -49,7 +53,19 @@ const POST_signup = (req, res, next) => {
                 req.session.user = user
                 req.session.save(error => {
                     if(error) console.log(error)
-                    res.redirect('/products')
+                    const message = {
+                        to: email,
+                        from: 'mrc.bsllt@gmail.com',
+                        subject: 'Confirm registration',
+                        html: `<h1>Hi ${email}, you successfully signed up!!!</h1>`
+                    }
+                    sendGrid.send(message, (error, info) => {
+                        if(error) {
+                            console.log(error.response.body.errors)
+                        } else {
+                            res.redirect('/products')
+                        }
+                    })
                 })
             }).catch(error => console.log(error))
         })

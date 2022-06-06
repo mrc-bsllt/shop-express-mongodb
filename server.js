@@ -1,14 +1,18 @@
 const path = require('path')
 const express = require('express')
-const mongoose = require('mongoose')
+
 const session = require('express-session')
+
+const mongoose = require('mongoose')
 const MongoDBstore = require('connect-mongodb-session')(session)
+const MONGODB_URI = 'mongodb+srv://mrc-bsllt:marcodevelon@cluster0.niomo.mongodb.net/shop'
+
 const bodyParser = require('body-parser')
+
 const csrf = require('csurf')
 const csrfProtection = csrf()
-const flash = require('connect-flash')
 
-const MONGODB_URI = 'mongodb+srv://mrc-bsllt:marcodevelon@cluster0.niomo.mongodb.net/shop'
+const flash = require('connect-flash')
 
 // MODELS
 const User = require('./models/User')
