@@ -83,5 +83,9 @@ router.post('/restore-password',
 )
 
 router.get('/reset-password/:reset_token', GET_resetPassword)
-router.post('/reset-password/', POST_resetPassword)
+router.post('/reset-password/', 
+  check('new_password', 'Invalid Password!')
+    .isStrongPassword({ minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1 }),
+  POST_resetPassword
+)
 module.exports = { authRoutes: router }

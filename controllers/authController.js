@@ -115,12 +115,27 @@ const GET_resetPassword = (req, res, next) => {
     } else {
         const { reset_token } = req.params
         User.findOne({ reset_token, token_expire: { $gt: Date.now() }}).then(user => {
-            res.render('auth/reset-password', { path: 'reset-password', errors: [], user_id: user._id, reset_token: user.reset_token })
+            res.render('auth/reset-password', { 
+                path: 'reset-password', 
+                errors: [], 
+                user_id: user._id, 
+                reset_token: user.reset_token 
+            })
         }).catch(error => console.log(error))
     }
 }
 const POST_resetPassword = (req, res, next) => {
     const { user_id, reset_token, new_password } = req.body
+    
+    const errors = validationResult(req)
+    if(!errors.isEmpty()) {
+        return res.render('auth/reset-password', { 
+            path: 'reset-password', 
+            errors: errors.array(), 
+            user_id, 
+            reset_token })
+    }
+    
     User.findOne({ _id: user_id, reset_token, token_expire: { $gt: Date.now() }}).then(user => {
         if(!user) {
             res.redirect('/signup')
