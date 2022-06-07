@@ -15,8 +15,6 @@ const bodyParser = require('body-parser')
 const csrf = require('csurf')
 const csrfProtection = csrf()
 
-const flash = require('connect-flash')
-
 // MODELS
 const User = require('./models/User')
 
@@ -38,8 +36,6 @@ app.use(session({
   store
 }))
 app.use(csrfProtection)
-app.use(flash()) // Serve per creare delle sessioni flash (quindi vengono cancellate dopo l'utilizzo). In questo caso le utilizzo per mandare gli errori che potrebbero essere generati dall'utente in fase di login/signup
-
 
 const { userRoutes } = require('./routes/user')
 const { adminRoutes } = require('./routes/admin')
