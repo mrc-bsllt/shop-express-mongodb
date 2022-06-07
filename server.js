@@ -17,7 +17,7 @@ const bodyParser = require('body-parser') // Con questo posso agilmente salvare 
 const multer = require('multer') // Con questo posso salvare i file in formato binario
 const fileStorage = multer.diskStorage({
   destination: (req, file, callback) => {
-    callback(null, 'images')
+    callback(null, 'storage/images')
   },
   filename: (req, file, callback) => {
     callback(null, file.filename + '-' + file.originalname)
@@ -43,7 +43,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(multer({ storage: fileStorage, fileFilter }).single('image'))
 app.set('view engine', 'ejs')
 app.use(express.static(path.join(__dirname, 'public')))
-app.use('/images', express.static(path.join(__dirname, 'images')))
+app.use('/storage/images', express.static(path.join(__dirname, 'storage/images')))
 app.use(flash())
 
 const store = new MongoDBstore({
