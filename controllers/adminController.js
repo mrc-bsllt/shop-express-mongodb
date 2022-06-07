@@ -1,3 +1,4 @@
+const { deleteFile } = require('../utils/delete-file')
 const Product = require('../models/Product')
 
 // GET admin products list
@@ -60,6 +61,7 @@ const editProduct = (req, res, next) => {
   }
 
   Product.findOne({ id }).then(product => {
+    deleteFile(product.image_url)
     product.title = title
     product.image_url = '/' + image.path
     product.price = price
@@ -81,7 +83,8 @@ const deleteProduct = (req, res, next) => {
 
   Product.findOneAndDelete({ _id: prod_id }).then(product => {
     const isInCart = req.user.cart.findIndex(prod => prod.product_id.toString() === product._id.toString()) > -1
-    
+    deleteFile(product.image_url)
+
     if(isInCart) {
       req.user.removeToCart(product._id).then(() => {
         res.redirect('/admin/products')

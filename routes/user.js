@@ -10,7 +10,8 @@ const { homePage,
         cartPost,
         cartRemove,
         createOrder, 
-        ordersPage } = require('../controllers/userController')
+        ordersPage,
+        GET_downloadOrder } = require('../controllers/userController')
 
 router.get('/', homePage)
 
@@ -23,5 +24,7 @@ router.post('/cart/remove', is_auth, cartRemove)
 
 router.post('/create-order', is_auth, createOrder)
 router.get('/orders', is_auth, ordersPage)
+
+router.get('/order/:order_id', is_auth, GET_downloadOrder)
 
 module.exports = { userRoutes: router }

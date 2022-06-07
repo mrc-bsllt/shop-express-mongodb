@@ -1,3 +1,7 @@
+const fs = require('fs')
+const path = require('path')
+const PDFDocument = require('pdfkit')
+
 const Product = require('../models/Product')
 const Order = require('../models/Order')
 
@@ -70,9 +74,35 @@ const createOrder = (req, res, next) => {
 }
 
 const ordersPage = (req, res, next) => {
-  Order.find({ user_id: req.session.user._id }).populate('user_id', '-cart').then(orders => {
+  Order.find({ user_id: req.user._id }).populate('user_id', '-cart').then(orders => {
     res.render('user/orders', { orders, path: 'orders' })
   }).catch(error => console.log(error))
+}
+
+const GET_downloadOrder = (req, res, next) => {
+  const { order_id } = req.params
+  const fileName = 'invoice-' + order_id + '.pdf'
+  const invoicePath = path.join('storage', 'pdf', fileName)
+  
+  Order.findOne({ _id: order_id }).then(order => {
+    const pdf = new PDFDocument()
+    res.setHeader('Content-Type', 'application/pdf')
+    res.setHeader('Content-Disposition', 'inline; filename="' + fileName + '"')
+    pdf.pipe(fs.createWriteStream(invoicePath))
+    pdf.pipe(res)
+    pdf.fontSize(26).text('Invoice: #' + order_id)
+    pdf.text('----------------------------')
+    pdf.fontSize(18).text(req.user.email, { underline: true })
+    order.products.forEach(product => {
+      pdf.text(`${product.product.title}: ${product.product.price}$    x${product.quantity}`)
+    })
+    pdf.text(`TOTAL: ${order.total_value}$`)
+    pdf.end()
+  }).catch(err => {
+    const error = new Error(error)
+    error.httpStatus = 500
+    return next(error)
+  })
 }
 
 module.exports = { 
@@ -83,5 +113,6 @@ module.exports = {
   cartPost, 
   cartRemove,
   createOrder,
-  ordersPage 
+  ordersPage,
+  GET_downloadOrder
 }
