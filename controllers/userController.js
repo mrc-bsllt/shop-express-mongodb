@@ -10,8 +10,25 @@ const homePage = (req, res, next) => {
 }
 
 const productsPage = (req, res, next) => {
-  Product.find().then(products => {
-    res.render('user/products', { products, path: 'products' })
+  const page = +req.query.page || 1
+  const productsForPage = 1
+  let totalItems
+  let lastPage
+
+  Product.find().countDocuments().then(total => {
+    totalItems = total
+    lastPage = Math.ceil(totalItems /productsForPage)
+
+    return Product.find().skip((page - 1) * productsForPage).limit(productsForPage)
+  }).then(products => {
+    res.render('user/products', { 
+      products, 
+      path: 'products',
+      showPagination: totalItems > productsForPage,
+      currentPage: page,
+      nextPage: page + 1,
+      lastPage
+    })
   }).catch(error => console.log(error))
 }
 

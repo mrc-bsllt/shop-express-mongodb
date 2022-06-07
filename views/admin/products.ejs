@@ -35,6 +35,27 @@
                     </div>
                 </article>
             <% }) %>
+            <% if(showPagination) { %>
+                <div class="centered">
+                    <% if(currentPage !== 1 && currentPage > 2) { %>
+                        <a href="?page=1">1</a>
+                        <span>...</span>
+                    <% } %>
+    
+                    <% if(nextPage <= lastPage) { %>
+                        <span style="color: red; font-weight: bold; font-size: 22px"><%= currentPage %></span>
+                        <a href="?page=<%= nextPage %>"><%= nextPage %></a>
+                    <% } else { %>
+                        <a href="?page=<%= currentPage - 1 %>"><%= currentPage - 1 %></a>
+                        <span style="color: red; font-weight: bold; font-size: 22px"><%= currentPage %></span>
+                    <% } %>
+    
+                    <% if(currentPage !== lastPage && currentPage <= lastPage - 2) { %>
+                        <span>...</span>
+                        <a href="?page=<%= lastPage %>"><%= lastPage %></a>
+                    <% } %>
+                </div>
+            <% } %>
         </div>
     <% } else { %>
         <h1>No Products Found!</h1>

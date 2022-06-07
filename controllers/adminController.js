@@ -3,9 +3,26 @@ const Product = require('../models/Product')
 
 // GET admin products list
 const productsPage = (req, res, next) => {
-  Product.find({ user_id: req.session.user._id }).then(products => {
-      res.render('admin/products', { products, path: 'admin-products' })
-    }).catch(error => console.log(error))
+  const page = +req.query.page || 1
+  const productsForPage = 2
+  let totalItems
+  let lastPage
+
+  Product.find({ user_id: req.session.user._id }).countDocuments().then(total => {
+    totalItems = total
+    lastPage = Math.ceil(totalItems /productsForPage)
+
+    return Product.find().skip((page - 1) * productsForPage).limit(productsForPage)
+  }).then(products => {
+    res.render('user/products', { 
+      products, 
+      path: 'admin-products',
+      showPagination: totalItems > productsForPage,
+      currentPage: page,
+      nextPage: page + 1,
+      lastPage
+    })
+  }).catch(error => console.log(error))
 }
 
 // Add product POST
