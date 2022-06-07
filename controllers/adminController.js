@@ -26,10 +26,14 @@ const addProductPage = (req, res, next) => {
 // GET edit product page
 const editProductPage = (req, res, next) => {
   const id = req.params.id
-
+  
   Product.findById(id).then(product => {
     res.render('admin/edit-product', { product, path: 'edit-product' })
-  }).catch(error => console.log(error))
+  }).catch(err => {
+    const error = new Error(err)
+    error.httpStatusCode = 500
+    return next(error)
+  })
 }
 // POST edit product
 const editProduct = (req, res, next) => { 
@@ -45,7 +49,11 @@ const editProduct = (req, res, next) => {
     return product.save()
   }).then(() => {
     res.redirect('/admin/products')
-  }).catch(error => console.log(error))
+  }).catch(err => {
+    const error = new Error(err)
+    error.httpStatusCode = 500
+    return next(error)
+  })
 }
 
 // POST delete product

@@ -35,34 +35,44 @@ app.use(session({
   saveUninitialized: false,
   store
 }))
-app.use(csrfProtection)
 
-const { userRoutes } = require('./routes/user')
-const { adminRoutes } = require('./routes/admin')
-const { authRoutes } = require('./routes/auth')
+app.use(csrfProtection)
+app.use((req, res, next) => { // Con res.locals posso passare delle variabili a tutte le viste che verranno renderizzate
+  res.locals.csrfToken = req.csrfToken()
+  next()
+})
 
 app.use((req, res, next) => {
   if(req.session.user) {
     User.findById(req.session.user._id).then(user => {
       req.user = user
       next()
-    }).catch(error => console.log(error))
+    }).catch(error => {
+      next(new Error(error))
+    })
   } else {
     next()
   }
 })
 
-app.use((req, res, next) => { // Con res.locals posso passare delle variabili a tutte le viste che verranno renderizzate
+app.use((req, res, next) => {
   res.locals.user = req.session.user
-  res.locals.csrfToken = req.csrfToken()
   next()
 })
+
+// Exporter routes
+const { userRoutes } = require('./routes/user')
+const { adminRoutes } = require('./routes/admin')
+const { authRoutes } = require('./routes/auth')
 
 app.use(authRoutes)
 app.use(userRoutes)
 app.use('/admin', adminRoutes)
 app.use('/', (req, res, next) => {
-  res.status(404).render('404', { path: '404' })
+  res.status(404).render('404', { path: '404', user: req.session.user })
+})
+app.use((error, req, res, next) => {
+  res.status(500).render('500', { path: '500', user: req.session.user })
 })
 
 mongoose.connect(`${MONGODB_URI}?retryWrites=true&w=majority`).then(() => {
