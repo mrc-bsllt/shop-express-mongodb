@@ -12,7 +12,7 @@ const productsPage = (req, res, next) => {
     totalItems = total
     lastPage = Math.ceil(totalItems /productsForPage)
 
-    return Product.find().skip((page - 1) * productsForPage).limit(productsForPage)
+    return Product.find({ user_id: req.session.user._id }).skip((page - 1) * productsForPage).limit(productsForPage)
   }).then(products => {
     res.render('user/products', { 
       products, 
